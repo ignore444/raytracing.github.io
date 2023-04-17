@@ -24,8 +24,8 @@ struct hit_record {
     vec3 normal;
     shared_ptr<material> mat_ptr;
     double t;
-    double u;
-    double v;
+    double u;   // texture¿« u
+    double v;   // texture¿« v
     bool front_face;
 
     inline void set_face_normal(const ray& r, const vec3& outward_normal) {

@@ -39,7 +39,12 @@ class moving_sphere : public hittable {
 };
 
 
-point3 moving_sphere::center(double time) const{
+point3 moving_sphere::center(double time) const
+{
+    if (time0 == time1)
+    {
+        return center0;
+    }
     return center0 + ((time - time0) / (time1 - time0))*(center1 - center0);
 }
 
