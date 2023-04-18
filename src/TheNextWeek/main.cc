@@ -44,7 +44,10 @@ color ray_color(const ray& r, const color& background, const hittable& world, in
 
     // If the ray hits nothing, return the background color.
     if (!world.hit(r, 0.001, infinity, rec))
+    {
+        // 결국 물체가 부딪히지 않아서, 배경에 부딪혀야 배경에너지를 가져올 수 있다.
         return background;
+    }
 
     ray scattered;
     color attenuation;
@@ -52,7 +55,7 @@ color ray_color(const ray& r, const color& background, const hittable& world, in
 
     if (!rec.mat_ptr->scatter(r, rec, attenuation, scattered))
         return emitted;
-
+    //     발광    + 반사율       * 입사에너지
     return emitted + attenuation * ray_color(scattered, background, world, depth-1);
 }
 

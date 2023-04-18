@@ -18,7 +18,8 @@
 #include "texture.h"
 
 
-class constant_medium : public hittable  {
+class constant_medium : public hittable  
+{
     public:
         constant_medium(shared_ptr<hittable> b, double d, shared_ptr<texture> a)
             : boundary(b),
@@ -32,10 +33,10 @@ class constant_medium : public hittable  {
               phase_function(make_shared<isotropic>(c))
             {}
 
-        virtual bool hit(
-            const ray& r, double t_min, double t_max, hit_record& rec) const override;
+        virtual bool hit(const ray& r, double t_min, double t_max, hit_record& rec) const override;
 
-        virtual bool bounding_box(double time0, double time1, aabb& output_box) const override {
+        virtual bool bounding_box(double time0, double time1, aabb& output_box) const override 
+        {
             return boundary->bounding_box(time0, time1, output_box);
         }
 
@@ -46,7 +47,8 @@ class constant_medium : public hittable  {
 };
 
 
-bool constant_medium::hit(const ray& r, double t_min, double t_max, hit_record& rec) const {
+bool constant_medium::hit(const ray& r, double t_min, double t_max, hit_record& rec) const 
+{
     // Print occasional samples when debugging. To enable, set enableDebug true.
     const bool enableDebug = false;
     const bool debugging = enableDebug && random_double() < 0.00001;
@@ -71,7 +73,11 @@ bool constant_medium::hit(const ray& r, double t_min, double t_max, hit_record& 
         rec1.t = 0;
 
     const auto ray_length = r.direction().length();
+
+    // ray(r)가 volume을 통과하는 거리
     const auto distance_inside_boundary = (rec2.t - rec1.t) * ray_length;
+
+    // density가 커질 수록 , hit distance가 짧아진다.
     const auto hit_distance = neg_inv_density * log(random_double());
 
     if (hit_distance > distance_inside_boundary)
@@ -80,7 +86,8 @@ bool constant_medium::hit(const ray& r, double t_min, double t_max, hit_record& 
     rec.t = rec1.t + hit_distance / ray_length;
     rec.p = r.at(rec.t);
 
-    if (debugging) {
+    if (debugging) 
+    {
         std::cerr << "hit_distance = " <<  hit_distance << '\n'
                   << "rec.t = " <<  rec.t << '\n'
                   << "rec.p = " <<  rec.p << '\n';

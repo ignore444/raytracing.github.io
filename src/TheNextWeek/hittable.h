@@ -102,7 +102,9 @@ class rotate_y : public hittable {
 };
 
 
-rotate_y::rotate_y(shared_ptr<hittable> p, double angle) : ptr(p) {
+rotate_y::rotate_y(shared_ptr<hittable> p, double angle) 
+    : ptr(p) 
+{
     auto radians = degrees_to_radians(angle);
     sin_theta = sin(radians);
     cos_theta = cos(radians);
@@ -135,7 +137,8 @@ rotate_y::rotate_y(shared_ptr<hittable> p, double angle) : ptr(p) {
 }
 
 
-bool rotate_y::hit(const ray& r, double t_min, double t_max, hit_record& rec) const {
+bool rotate_y::hit(const ray& r, double t_min, double t_max, hit_record& rec) const 
+{
     auto origin = r.origin();
     auto direction = r.direction();
 
