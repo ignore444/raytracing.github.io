@@ -89,6 +89,8 @@ hittable_list cornell_box() {
     return objects;
 }
 
+#define AA 1
+
 
 int main() {
     // Image
@@ -96,7 +98,11 @@ int main() {
     const auto aspect_ratio = 1.0 / 1.0;
     const int image_width = 600;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
+#if AA
     const int samples_per_pixel = 100;
+#else
+    const int samples_per_pixel = 1;
+#endif
     const int max_depth = 50;
 
     // World
@@ -130,9 +136,15 @@ int main() {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i) {
             color pixel_color(0,0,0);
-            for (int s = 0; s < samples_per_pixel; ++s) {
+            for (int s = 0; s < samples_per_pixel; ++s) 
+            {
+            #if AA
                 auto u = (i + random_double()) / (image_width-1);
                 auto v = (j + random_double()) / (image_height-1);
+            #else
+				auto u = (double)(i) / (image_width - 1);
+				auto v = (double)(j) / (image_height - 1);
+            #endif
                 ray r = cam.get_ray(u, v);
                 pixel_color += ray_color(r, background, world, lights, max_depth);
             }
