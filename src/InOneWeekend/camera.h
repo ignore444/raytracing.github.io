@@ -13,6 +13,7 @@
 
 #include "hittable.h"
 #include "material.h"
+#include <fstream>
 
 
 class camera {
@@ -30,10 +31,16 @@ class camera {
     double defocus_angle = 0;  // Variation angle of rays through each pixel
     double focus_dist = 10;    // Distance from camera lookfrom point to plane of perfect focus
 
-    void render(const hittable& world) {
+    void render(const hittable& world, const std::string& filename = "image.ppm") {
         initialize();
 
-        std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+        std::ofstream out(filename);
+        if (!out) {
+            std::cerr << "Failed to open output file '" << filename << "'\n";
+            return;
+        }
+
+        out << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
         for (int j = 0; j < image_height; j++) {
             std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
@@ -43,7 +50,7 @@ class camera {
                     ray r = get_ray(i, j);
                     pixel_color += ray_color(r, max_depth, world);
                 }
-                write_color(std::cout, pixel_samples_scale * pixel_color);
+                write_color(out, pixel_samples_scale * pixel_color);
             }
         }
 
