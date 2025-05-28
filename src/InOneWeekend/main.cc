@@ -12,6 +12,7 @@
 #include "rtweekend.h"
 
 #include "camera.h"
+#include <fstream>
 #include "hittable.h"
 #include "hittable_list.h"
 #include "material.h"
@@ -76,5 +77,11 @@ int main() {
     cam.defocus_angle = 0.6;
     cam.focus_dist    = 10.0;
 
-    cam.render(world);
+    std::ofstream out("image.ppm");
+    if (!out) {
+        std::cerr << "Failed to open output file 'image.ppm'\n";
+        return 1;
+    }
+
+    cam.render(world, out);
 }
